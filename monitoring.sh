@@ -1,0 +1,12 @@
+uname --all
+echo "#CPU physical: $(grep -c processor /proc/cpuinfo)"
+echo "#vCPU: $(nproc)"
+echo "#Memory Usage: $(free -m | grep 'Mem' | awk '{ printf("%d/%dMB", $3, $2) }') $(free | grep 'Mem' | awk '{ printf("(%.2f%%)", $3 / $2 * 100) }')"
+echo "#Disk Usage: $(df -h | grep LVMGroup-root | awk '{printf("%d/%s (%d%%)", $3, $2, $5)}')"
+echo "#CPU load: $(top -bn1 | grep Cpu | cut -c 10- | xargs | awk '{printf("%.1f%%", $1 + $3)}')"
+echo "#Last boot: $(who -b | cut -c 42- | xargs)"
+echo "#LVM use: $(lvm pvdisplay | grep Allocatable | awk '{print $2}')"
+echo "#Connexions TCP: $(netstat -anp | grep ESTAB | wc -l) ESTABLISHED"
+echo "#User log: $(who | wc -l)"
+echo "#Network: $(ip addr | grep inet\ 10 | awk '{print $2}') $(ip addr | grep link/ether | awk '{print $2}')"
+echo "#Sudo: $(cat /var/log/sudo/logfile | grep COMMAND | wc -l) cmd"
